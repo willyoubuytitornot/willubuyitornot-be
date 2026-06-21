@@ -1,19 +1,17 @@
 package com.willu.buyitornot.service;
 
-import com.willu.buyitornot.exception.ResourceNotFoundException;
-import com.willu.buyitornot.infra.collection.User;
-import com.willu.buyitornot.infra.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
+import com.willu.buyitornot.web.dto.request.CreateUserRequest;
+import com.willu.buyitornot.web.dto.response.UserResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
 
-    public User getUserById(ObjectId id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toHexString()));
+    public UserResponse createUser(CreateUserRequest request) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public UserResponse getUser(String userId) {
+        throw new UnsupportedOperationException("Not implemented");
     }
 }
