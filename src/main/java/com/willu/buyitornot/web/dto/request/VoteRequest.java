@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * 투표 기록/갱신 요청. (POST /v1/users/{userId}/swipes/{swipeId}/votes)
+ * 배치 투표 요청의 단일 항목. (POST /v1/users/{userId}/swipes/{swipeId}/votes 는 이 항목들의 배열을 받는다)
  */
 public record VoteRequest(
 

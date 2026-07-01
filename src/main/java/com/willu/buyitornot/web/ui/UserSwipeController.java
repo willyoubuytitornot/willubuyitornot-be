@@ -9,13 +9,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @WrapResponse
 @RestController
@@ -38,29 +39,16 @@ public class UserSwipeController {
     }
 
     @Operation(
-            summary = "투표 기록 / 갱신",
-            description = "게임 한 개에 대한 결정을 저장. (userId, swipeId) user_swipes 문서를 upsert.",
+            summary = "투표 기록 / 갱신 (배치)",
+            description = "n개 게임에 대한 결정을 한 번에 저장. (userId, swipeId) user_swipes 문서를 upsert.",
             tags = {"Votes"}
     )
     @PostMapping("/votes")
     public UserSwipeResponse vote(
             @Parameter(description = "users._id (ObjectId)") @PathVariable String userId,
             @Parameter(description = "swipes._id (ObjectId)") @PathVariable String swipeId,
-            @Valid @RequestBody VoteRequest request) {
-        return userSwipeService.vote(userId, swipeId, request);
-    }
-
-    @Operation(
-            summary = "투표 취소 (되돌리기)",
-            description = "해당 gameId를 buy/skip/maybe 배열에서 제거.",
-            tags = {"Votes"}
-    )
-    @DeleteMapping("/votes/{gameId}")
-    public UserSwipeResponse cancelVote(
-            @Parameter(description = "users._id (ObjectId)") @PathVariable String userId,
-            @Parameter(description = "swipes._id (ObjectId)") @PathVariable String swipeId,
-            @Parameter(description = "games._id (ObjectId)") @PathVariable String gameId) {
-        return userSwipeService.cancelVote(userId, swipeId, gameId);
+            @Valid @RequestBody List<VoteRequest> requests) {
+        return userSwipeService.vote(userId, swipeId, requests);
     }
 
     @Operation(
