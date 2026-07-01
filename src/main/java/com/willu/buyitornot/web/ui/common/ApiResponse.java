@@ -3,8 +3,7 @@ package com.willu.buyitornot.web.ui.common;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class
-ApiResponse<T> {
+public class ApiResponse<T> {
     private boolean success;
     private T data;
     private String message;

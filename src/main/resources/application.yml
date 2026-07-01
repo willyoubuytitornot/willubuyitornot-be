@@ -11,3 +11,7 @@ spring:
 gemini:
   api:
     key: ${GEMINI_API_KEY:your-api-key-here}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html      # 코드(@OpenAPIDefinition/컨트롤러)에서 생성된 /v3/api-docs 를 로드
