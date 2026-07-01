@@ -5,6 +5,8 @@ import com.willu.buyitornot.web.dto.response.PreferenceReportResponse;
 import com.willu.buyitornot.web.dto.response.UserSwipeResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserSwipeService {
 
@@ -12,11 +14,7 @@ public class UserSwipeService {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public UserSwipeResponse vote(String userId, String swipeId, VoteRequest request) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    public UserSwipeResponse cancelVote(String userId, String swipeId, String gameId) {
+    public UserSwipeResponse vote(String userId, String swipeId, List<VoteRequest> requests) {
         throw new UnsupportedOperationException("Not implemented");
     }
 
