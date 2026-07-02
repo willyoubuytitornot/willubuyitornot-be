@@ -1,3 +1,6 @@
+server:
+  forward-headers-strategy: framework
+
 spring:
   # MongoDB 설정
   data:
