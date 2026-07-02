@@ -3,10 +3,6 @@
 "게임을 살까 말까" 스와이프 서비스(willubuyitornot)의 MongoDB 컬렉션 구조 문서.
 필드/타입/필수 여부는 `createCollection`의 `$jsonSchema` 검증 규칙을 정본으로 한다.
 
-> ⚠️ Java 엔티티 동기화 필요 항목: 현재 `Game.java`는 구버전(`releaseYear: Integer`)으로,
-> 본 문서의 `games` 스키마(`releaseDate: date` + `aiComment`/`storeUrl`/`communityUrl` 추가)와
-> 차이가 있다. 엔티티 동기화는 별도 작업으로 처리한다.
-
 ## 개요
 
 | 컬렉션 | 역할 |
