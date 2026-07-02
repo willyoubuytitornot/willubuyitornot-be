@@ -117,7 +117,7 @@ com.willu.buyitornot
 ```bash
 ./gradlew compileJava        # 빠른 컴파일 체크 (테스트 제외)
 ./gradlew test               # JUnit 플랫폼으로 전체 테스트 실행
-./gradlew test --tests 'com.willu.buyitornot.web.ui.UserControllerTest'   # 단일 클래스
+./gradlew test --tests 'com.willu.buyitornot.web.ui.UserControllerIntegrationTest'   # 단일 클래스
 ./gradlew build              # 테스트 포함 전체 빌드
 ./gradlew bootRun            # 앱 실행 (localhost:27017 MongoDB 필요)
 ```
@@ -133,5 +133,22 @@ Gradle 래퍼가 커밋되어 있다(`./gradlew`). 전역 `gradle`이 있다고 
   - `@SpringBootTest` — 와이어링/통합 전용 (`contextLoads`가 이미 존재).
 - MockMvc 테스트에서는 **래퍼 shape**를 검증한다: `$.success`, `$.data.*`, `$.error` — 실제
   클라이언트는 감싸진 응답을 보지, 원시 도메인 객체를 보지 않기 때문이다.
-- Mongo를 쓸 수 없는 CI/샌드박스라면? 모킹된 서비스를 쓰는 `@WebMvcTest`를 우선하거나,
-  embedded-mongo를 추가한다. 환경 부재를 미검증 엔드포인트로 두지 말고 — 명시적으로 기록한다.
+- 실제 Mongo가 필요한 `web.ui` 통합 테스트는 Testcontainers를 사용한다:
+  `com.willu.buyitornot.support.AbstractMongoIntegrationTest`(`@Testcontainers` +
+  `@Container` + `@ServiceConnection MongoDBContainer("mongo:7.0")`)를 상속하고,
+  `@SpringBootTest(webEnvironment = MOCK)` + `@AutoConfigureMockMvc`로 MockMvc를 통해 실제
+  서비스·리포지토리 계층까지 검증한다(`UserControllerIntegrationTest` 참조). `@ServiceConnection`이
+  `spring.data.mongodb.uri`를 자동 주입하므로 별도 `application-test.yml`은 필요 없다.
+  `@WebMvcTest` + `@MockBean` 서비스 조합은 컨트롤러 슬라이스만 검증하고 싶을 때만 쓴다.
+- Testcontainers는 로컬 Docker 데몬이 필요하다. Docker가 없는 CI/샌드박스에서는 컨테이너
+  기동에 실패해 테스트가 즉시 실패한다 — 조용히 건너뛰지 말고, 환경 부재를 명시적으로
+  기록한다(미검증 항목으로 QA 리포트에 남긴다).
+- **Colima 사용자 로컬 설정:** Docker Desktop이 아닌 Colima로 Docker를 띄운 환경에서는
+  기본 소켓 경로(`/var/run/docker.sock`)가 없어 Testcontainers가 접속에 실패한다.
+  `~/.testcontainers.properties`에 `docker.host=unix:///Users/<user>/.colima/default/docker.sock`를
+  추가하고, ryuk(리소스 리퍼) 컨테이너가 볼륨 마운트할 소켓 경로를 컨테이너 내부 기준으로
+  알려주기 위해 실행 시 `TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock` 환경변수를
+  설정해야 한다(둘 다 리포지토리가 아닌 개발자 로컬 환경 설정). `build.gradle`의 `test` 태스크에는
+  최신 Docker Engine이 요구하는 최소 API 버전보다 낮게 협상하려는 testcontainers 내장
+  docker-java의 기본값 문제를 우회하기 위해 `systemProperty 'api.version', '1.44'`가 이미
+  고정되어 있다.
