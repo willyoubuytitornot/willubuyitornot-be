@@ -8,6 +8,8 @@ group = 'com.willu'
 version = '0.0.1-SNAPSHOT'
 description = 'buyitornot'
 
+ext['testcontainers.version'] = '1.20.4'
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -31,9 +33,15 @@ dependencies {
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mongodb'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    // 최신 Docker Engine(Colima 등)이 요구하는 최소 API 버전보다 낮은 버전으로 협상을
+    // 시도하는 testcontainers 내장 docker-java의 기본값 문제를 우회한다.
+    systemProperty 'api.version', '1.44'
 }
