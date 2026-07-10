@@ -23,7 +23,7 @@ public class GeminiService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String GEMINI_API_URL =
-        "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent";
+        "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent";
 
     public String chat(String prompt) {
         try {
